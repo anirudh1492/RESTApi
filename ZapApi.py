@@ -43,8 +43,26 @@ class CreateRest(Resource):
     	except Exception as e:
     		return {'error': str(e)}
 
-api.add_resource(CreateRest, '/CreateRest')
+class CreateMenuItem(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('Mtype',type=str,help='Enter the ID for the Restraunt')
+        parser.add_argument('Menu_id',type=str,help='Enter the Menu Id')
+        parser.add_argument('Mname',type=str,help='Enter the Menu Id')
+        args = parser.parse_args()
 
+        _mtype = args['Mtype']
+        _mid = args['Menu_id']
+        _mname = args['Mname']
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('menuitem',(_mtype,_mid,_mname))
+        data = cursor.fetchall()
+        conn.commit()
+
+api.add_resource(CreateRest, '/CreateRest')
+api.add_resource(CreateMenuItem,'/Crtmitem')
 
 if __name__ == '__main__':
     app.run(debug=True)
