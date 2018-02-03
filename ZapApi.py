@@ -61,8 +61,26 @@ class CreateMenuItem(Resource):
         data = cursor.fetchall()
         conn.commit()
 
+class CreateMenu(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('Restraunt_id',type=str,help='Enter the ID for the Restraunt')
+        parser.add_argument('Menu_id',type=str,help='Enter the Menu Id')
+        args = parser.parse_args()
+
+        _rid = args['Restraunt_id']
+        _mid = args['Menu_id']
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('createmenu',(_rid,_mid))
+        data = cursor.fetchall()
+        conn.commit()
+
 api.add_resource(CreateRest, '/CreateRest')
 api.add_resource(CreateMenuItem,'/Crtmitem')
+api.add_resource(CreateMenu,'/Crmenu')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
