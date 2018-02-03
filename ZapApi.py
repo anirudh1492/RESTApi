@@ -77,10 +77,24 @@ class CreateMenu(Resource):
         data = cursor.fetchall()
         conn.commit()
 
+class Restraunt(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('Name',type=str,help='Enter the city name to find its restraunts')
+        args = parser.parse_args()
+        _rfname = args['Name']
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cmdstr = ('CALL showdata("'+_rfname+'");')
+        cursor.execute(cmdstr)
+        data = cursor.fetchall()
+        for row in data:
+            return jsonify(data)
+
 api.add_resource(CreateRest, '/CreateRest')
 api.add_resource(CreateMenuItem,'/Crtmitem')
 api.add_resource(CreateMenu,'/Crmenu')
-
+api.add_resource(Restraunt, '/GetRestraunt')
 
 if __name__ == '__main__':
     app.run(debug=True)
