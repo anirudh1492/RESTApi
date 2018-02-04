@@ -32,7 +32,7 @@ class CreateRest(Resource):
     		_name = args['Name']
     		_country = args['Country']
     		_city = args['City']
-    		_emp = args['Num_of_employee']
+    		
 
     		conn = mysql.connect()
     		cursor = conn.cursor()
@@ -88,13 +88,53 @@ class Restraunt(Resource):
         cmdstr = ('CALL showdata("'+_rfname+'");')
         cursor.execute(cmdstr)
         data = cursor.fetchall()
+        temp = dict()
         for row in data:
-            return jsonify(data)
+            temp[row[0]] = {'City':row[1],'Country':row[2]}
+        
+        return jsonify(temp)
+
+class GetMenuItem(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('Rname',type=str,help='Enter the restraunt to find its menu')
+        args = parser.parse_args()
+
+        _rname = args['Rname']
+    
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        
+        #cmdstr = ('select mname from t3 INNER JOIN t2 ON t2.mid = t3.mid INNER JOIN t1 ON t2.rid = t1.rid WHERE name ="'+_rname+'" ')
+        cmdstr = ('CALL getmenuitems("'+_rname+'");')
+        print('::::',_rname)
+        #cursor.callproc('getmenuitems',(_rname))
+        cursor.execute(cmdstr)
+        data = cursor.fetchall()
+        temp = dict()
+        for row in data:
+            temp[_rname] = {'Itemname':row[0],'MenuType':row[1]}
+        
+        return jsonify(temp)
+
+class GetMenu(Resource):
+    def get(self):
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute('select * from testdatabase.t2')
+        data = cursor.fetchall()
+        
+        for row in data:
+            return jsonify(temp)    
+        
+
 
 api.add_resource(CreateRest, '/CreateRest')
 api.add_resource(CreateMenuItem,'/Crtmitem')
 api.add_resource(CreateMenu,'/Crmenu')
 api.add_resource(Restraunt, '/GetRestraunt')
+api.add_resource(GetMenu,'/GetMenu')
+api.add_resource(GetMenuItem,'/GetMenuItem')
 
 if __name__ == '__main__':
     app.run(debug=True)
