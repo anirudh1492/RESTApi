@@ -125,7 +125,35 @@ class GetMenu(Resource):
         data = cursor.fetchall()
         
         for row in data:
-            return jsonify(temp)    
+            return jsonify(temp) 
+
+class RRemove(Resource):
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('Name',type=str,help='Enter the name of the restraunt to delete')
+        args=parser.parse_args()
+        _delname = args['Name']     
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        #cursor.callproc('delete',(_delname))
+        commandstr = 'delete from testdatabase.t1 where name ="'+_delname + '"'
+        cursor.execute(commandstr)
+        conn.commit()
+
+class MRemove(Resource):
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('ItemName',type=str,help='Enter the name of the restraunt to delete')
+        args=parser.parse_args()
+        _delname = args['ItemName']     
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        #cursor.callproc('delete',(_delname))
+        commandstr = 'delete from testdatabase.t3 where name ="'+_delname + '"'
+        cursor.execute(commandstr)
+        conn.commit()      
         
 
 
@@ -135,6 +163,8 @@ api.add_resource(CreateMenu,'/Crmenu')
 api.add_resource(Restraunt, '/GetRestraunt')
 api.add_resource(GetMenu,'/GetMenu')
 api.add_resource(GetMenuItem,'/GetMenuItem')
+api.add_resource(RRemove,'/RDelete')
+api.add_resource(MRemove,'/MDelete')
 
 if __name__ == '__main__':
     app.run(debug=True)
