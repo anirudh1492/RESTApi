@@ -5,11 +5,6 @@ import unittest
 from ZapApi import app
 import requests
 
-
-
-
-
-
 class testget(unittest.TestCase):
     def setUp(self):
         self.ApiUrl = "http://127.0.0.1:5000/GetRestraunt?Name=California"
