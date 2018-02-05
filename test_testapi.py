@@ -1,8 +1,9 @@
-import ZapApi
+import requests as req
 import json
 import pytest
 
-from ZapApi import app
+
+
 
 @pytest.fixture
 def client(request):
@@ -14,9 +15,13 @@ def client(request):
 	request.addfinalizer(teardown)
 	return test_client
 
-def testrest(client):
-	response = client.get('http://localhost:5000/GetRestraunt?Name=California')
-	
-	assert(b'Bawarchi' in response.data)
 
+@pytest.get.paramterized("Name",[('California'),('Atlanta'),('Garland'),('Plano')])
+
+def getrest(Name):
+	base_url = 'http://127.0.0.1:5000/GetRestraunt'
+	data = {'Name':Name}
+	response = req.get(base_url,data)
+	a=json.loads(response.text)
+	return(a)
 	

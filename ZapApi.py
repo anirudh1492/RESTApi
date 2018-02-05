@@ -90,7 +90,7 @@ class Restraunt(Resource):
         data = cursor.fetchall()
         temp = dict()
         for row in data:
-            temp[row[0]] = {'City':row[1],'Country':row[2]}
+            temp[row[0]] = {'City':row[1],'Restrauntid':row[2]}
         
         return jsonify(temp)
 
@@ -167,4 +167,4 @@ api.add_resource(RRemove,'/RDelete')
 api.add_resource(MRemove,'/MDelete')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host = '0.0.0.0')
