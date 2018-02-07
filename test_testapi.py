@@ -40,4 +40,22 @@ def test_getmenu(getmenuitem,name,expected):
 	menu_list = getmenuitem(name)[name]['Itemname']
 	assert menu_list == expected
 
+#@pytest.mark.parametrize("rid,name,city,country,output",[("NYCSB","Starbucks","New York","United States")])
+
+@pytest.fixture
+def postrest():
+	def _postrestint(rid,name,city,country):
+		base_url = 'http://127.0.0.1:5000/CreateRest'
+		data = {'Restraunt_id':rid,"Name":name,"Country":country,"City":city}
+		response = req.post(base_url,data)
+		return(response.text)
+	return _postrestint
+
+@pytest.mark.parametrize("rid,name,city,country,expected",[("IPV","Velvet","Pune","India","Successfully Added")])
+def test_postrest(postrest,rid,name,city,country,expected):
+	a=postrest(rid,name,city,country).strip().replace('"','')
+	#rest_list = list(getrest(city).keys()
+	assert a == expected
+
+
 
