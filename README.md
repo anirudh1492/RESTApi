@@ -1,3 +1,4 @@
+Link to GIT : https://github.com/anirudh1492/RestApi
 # ZapApi
 This REST API is made to simulate a part of an online ordering system and supports GET, POST and DELETE methods for the following three objects of the system.
 * Restraunt
@@ -6,14 +7,13 @@ This REST API is made to simulate a part of an online ordering system and suppor
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 ### Prerequisites
 In Order to get this API simulated on the local machine following are the rquirements
 * Python 3
 * Flask - Restful
 * MySQL 
-**The server can be run by installing the python dependencies and calling the  [ **ZapApi.py**  ] file from the python directory.**
+* **The server can be run by installing the python dependencies and calling the  [ **ZapApi.py**  ] file from the python directory.**
 ### PYTHON CONFIG FOR MYSQL DATABASE CONNECTION REQUIREMENTS
 **app.config['MYSQL_DATABASE_USER'] =** 'user_name'
 **app.config['MYSQL_DATABASE_PASSWORD']** = 'password'
