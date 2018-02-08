@@ -37,9 +37,13 @@ class CreateRest(Resource):
             cursor = conn.cursor()
             cursor.callproc('spcreate',(_name,_city,_rid))
             data = cursor.fetchall()
-            #return {'Restraunt_id': _rid, 'Name':_name
             conn.commit()
-            return(data)
+            #return(data[0][0])
+            if(data == [["Name Exists !!"]]):
+                return('Failed')
+            else:
+                return('Successfully Added')
+
 
         except Exception as e:
             return {'error': str(e)}
@@ -59,8 +63,14 @@ class CreateMenuItem(Resource):
         conn = mysql.connect()
         cursor = conn.cursor()
         cursor.callproc('menuitem',(_mtype,_mid,_mname))
-        data = cursor.fetchall()
         conn.commit()
+        data = cursor.fetchall()
+        # return(data[0][0])
+        if(data == [["Menu Exists !!"]]):
+            return('Failed')
+        else:
+            return('Successfully Added')
+        
 
 class CreateMenu(Resource):
     def post(self):
@@ -120,9 +130,12 @@ class GetMenuItem(Resource):
 
 class GetMenu(Resource):
     def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("Mtype",type=str,help="Enter the type of menu to see all available items")
+        _mtypye = args['Mtype']
         conn = mysql.connect()
         cursor = conn.cursor()
-        cursor.execute('select * from testdatabase.t2')
+        cursor.execute('select * from testdatabase.t2 where mtype = "'+_mtype+'"')
         data = cursor.fetchall()
         
         for row in data:

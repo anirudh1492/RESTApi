@@ -57,5 +57,58 @@ def test_postrest(postrest,rid,name,city,country,expected):
 	#rest_list = list(getrest(city).keys()
 	assert a == expected
 
+@pytest.fixture
+def postmenu():
+	def _postmenuint(mtype,mname,mid):
+		base_url = 'http://127.0.0.1:5000/Crtmitem'
+		data = {'Mtype':mtype,"Menu_id":mid,"Mname":mname}
+		response = req.post(base_url,data)
+		return(response.text)
+	return _postmenuint
+
+@pytest.mark.parametrize("mtype,mname,mid,expected",[("Lunch","Kadhi","L098","Successfully Added")])
+def test_postmenu(postmenu,mtype,mname,mid,expected):
+	a=postmenu(mtype,mname,mid).strip().replace('"','')
+	#rest_list = list(getrest(city).keys()
+	assert a == expected
+
+
+@pytest.fixture
+def delrestraunt():
+	def _delrestint(getrest,rname):
+		base_url = 'http://127.0.0.1:5000/RDelete?Name='+rname
+		data = {'Name':rname}
+		print("::",data)
+		print(":|",base_url)
+		respose = req.delete(base_url)
+		return('deleted')
+		
+	return _delrestint
+
+@pytest.mark.parametrize("rname,expected",[("Grub","Grub")])
+def test_delrestraunt(delrestraunt,getrest,rname,expected):
+	out = delrestraunt(getrest,rname)
+	a=getrest(rname)
+	list_get = list(a.keys())	
+	print(list_get)
+	assert list_get == expected
+
+#DELETE MENU TEST FUNCTION
+@pytest.fixture
+def delmenu():
+	def _delmenuint(getrest,mname):
+		base_url = 'http://127.0.0.1:5000/MDelete?ItemName='+mname
+		respose = req.delete(base_url)
+		return('deleted')
+		
+	return _delmenuint
+
+@pytest.mark.parametrize("rname,expected",[("Grub","Grub")])
+def test_delrestraunt(delmenu,getmenuitem,Itemname,expected):
+	out = delmenu(getrest,rname)
+	a=getmenuitem(rname)
+	list_get = a(name)[name]['Itemname']	
+	print(list_get)
+	assert list_get == expected
 
 
